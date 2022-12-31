@@ -3,9 +3,9 @@ const mariadb = require('mariadb');
 const path = require('path');
 
 const pool = mariadb.createPool({
-    host:'https://admin-mariadb-cf24lcbkizu9.gksl2.cloudtype.app/',
+    host:'svc.gksl2.cloudtype.app',
     user:'root',
-    port:'3306',
+    port:'31338',
     database:'mystory',
     password:'12345',
     connectionLimit: 5
