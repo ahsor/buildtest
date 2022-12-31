@@ -3,7 +3,7 @@ const {v4:uuid} = require('uuid');
  
 
 const pool = mariadb.createPool({
-    host:'127.0.0.1',
+    host:'https://admin-mariadb-cf24lcbkizu9.gksl2.cloudtype.app/',
     user:'root',
     port:'3306',
     database:'mystory',
