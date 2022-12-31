@@ -56,7 +56,7 @@
         loginbtn.addEventListener('click', function () {
             console.log(userid.value, userpwd.value);
             const user = { userid: userid.value, userpwd: userpwd.value }
-            fetch('http://localhost:3000/auth/login', {
+            fetch('https://port-0-mystore-cf24lcbkizu9.gksl2.cloudtype.app/auth/login', {
                 method: 'POST',
                 body: JSON.stringify(user),
                 headers: {
@@ -73,7 +73,7 @@
         document.querySelector('.logout').addEventListener('click', (e) => {
             e.preventDefault();
             //document.querySelector('.logout').style.display = 'none';
-            fetch('http://localhost:3000/auth/logout', {
+            fetch('https://port-0-mystore-cf24lcbkizu9.gksl2.cloudtype.app/auth/logout', {
                 method: 'delete',
                 headers: {
                     'Content-type': 'application/json; charset=UTF-8',
