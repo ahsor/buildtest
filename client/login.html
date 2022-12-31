@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Maven+Pro:wght@800&display=swap" rel="stylesheet">
+  <!-- <link rel="stylesheet" href="/css/reset.css">
+  <link rel="stylesheet" href="/css/public.css">
+  <link rel="stylesheet" href="/css/login.css"> -->
+  <title> Login</title>
+  <style>
+    .logout {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <button class="logout">로그아웃 </button>
+  <section class="login">
+    <div class="login-container">
+      <d class="login-box">
+        <h1>login</h1>
+        <div>
+          <label for="username"></label>
+          <input type="text" id="userid" name="userid" placeholder="ID 또는 E-Mail" autocomplete="off">
+        </div>
+        <div>
+          <label for="userpwd"></label>
+          <input type="password" id="userpwd" name="userpwd" placeholder="비밀번호">
+        </div>
+        <div class="ck">
+          <input type="checkbox" id="checkbox">
+          <label for="checkbox">로그인 상태 유지</label>
+        </div>
+        <div>
+          <button class="loginbtn">로그인</button>
+        </div>
+        <div class="registerbtn">
+          <span><a href="#">회원가입 </a></span>
+          <span><a href="#">ID 찾기</a></span>
+          <span><a href="#">비밀번호 찾기</a></span>
+        </div>
+    </div>
+    </div>
+  </section>
+
+  <script>
+    const loginbtn = document.querySelector('.loginbtn');
+    const userid = document.querySelector('#userid');
+    const userpwd = document.querySelector('#userpwd');
+
+
+    loginbtn.addEventListener('click', function () {
+      console.log(userid.value, userpwd.value);
+      const user = { userid: userid.value, userpwd: userpwd.value }
+
+      // app.post('/login', (req, res)=>{ 
+      fetch('http://localhost:3000/auth/login', {
+        method: 'POST',
+        body: JSON.stringify(user),
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        },
+      })
+        .then((response) => response.json())
+        .then((response) => {
+          //console.log(response);
+          if (response.success) {
+            document.querySelector('.logout').style.display = 'block';
+            document.querySelector('.login').style.display = 'none';
+          } else {
+            alert(response.message);
+          }
+        });
+    })
+
+    document.querySelector('.logout').addEventListener('click', (e) => {
+      e.preventDefault();
+      //document.querySelector('.logout').style.display = 'none';
+      fetch('http://localhost:3000/auth/logout', {
+        method: 'delete',
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        },
+      })
+        .then((response) => response.json())
+        .then((response) => {
+          console.log(response.success);
+          if (response.success) {
+            document.querySelector('.logout').style.display = 'none';
+            location.href = 'http://localhost:3000/';
+            document.querySelector('.login').style.display = 'block';
+          } else {
+            alert(response.message);
+          }
+        });
+    })
+
+    async function checkCookie() {
+      const mycookie = await document.cookie;
+      console.log(mycookie)
+      if (!mycookie.includes('user')) {
+        document.querySelector('.logout').style.display = 'none';
+        document.querySelector('.login').style.display = 'block';
+      } else {
+        document.querySelector('.logout').style.display = 'block';
+        document.querySelector('.login').style.display = 'none';
+      }
+    }
+
+    checkCookie();
+  </script>
+</body>
+
+</html>
+
+<!-- 
+  location.href 사용법
+  참고링크 : https://hasudoki.tistory.com/entry/Javascript-URL%ED%8E%98%EC%9D%B4%EC%A7%80%EB%A5%BC-Location-Redirect-Reload-%ED%86%B5%ED%95%B4-%EC%82%B4%ED%8E%B4%EB%B3%B4%EC%9E%90
+
+
+사용자가 클릭을 통해 페이지가 이동하면 location.href=""을 사용한다.
+
+HTTP Redirect를 하고 싶으면 location.replace("")를 사용한다.
+
+다음은 사용 예제
+
+//HTTP Redirect를 클라이언트에서 처리할때
+window.location.replace("http://example.com");
+
+//사용자의 클릭 이벤트용
+window.location.href = "http://example.com";
+
+
+
+
+제이쿼리를 이용하는 방법
+
+제이쿼리로도 다음과 같이 사용할 수 있다.
+
+//attr속성을 사용한다.
+$(location).attr('href', 'http://example.com');
+
+이 방법은 사용가능 하지만 추천하지는 않는다.
+
+
+
+
+
+이 외의 방법으로 페이지를 이동시키는 방법
+
+
+
+
+//assign 복사함수로도 구현 가능
+window.location.assign('http://www.example.com');
+
+//window뿐 아니라 document로도 가능
+document.location.href = '/path';
+
+//구형 익스플로어에서는 다음방법도 가능했다.
+window.navigate('http://example.com');
+
+//히스토리를 이용하여 이동하는 방법
+window.history.back();
+window.history.go(-1);
+
+//
+self.location = 'http://www.example.com';
+
+
+이렇게 많은 방법의 페이지 이동방법이 있지만 가장 위에 있는 방법을 추천한다.
+ -->

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .logout {
+            width: 100px;
+            background-color: skyblue;
+            cursor: pointer;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="/auth/logout" class="logout">로그아웃</a>
+    <div class="login"></div>
+    <section class="login">
+        <div class="login-container">
+            <d class="login-box">
+                <h1>login</h1>
+                <div>
+                    <label for="username"></label>
+                    <input type="text" id="userid" name="userid" placeholder="ID 또는 E-Mail" autocomplete="off">
+                </div>
+                <div>
+                    <label for="userpwd"></label>
+                    <input type="password" id="userpwd" name="userpwd" placeholder="비밀번호">
+                </div>
+                <div class="ck">
+                    <input type="checkbox" id="checkbox">
+                    <label for="checkbox">로그인 상태 유지</label>
+                </div>
+                <div>
+                    <button class="loginbtn">로그인</button>
+                </div>
+                <div class="registerbtn">
+                    <span><a href="#">회원가입 </a></span>
+                    <span><a href="#">ID 찾기</a></span>
+                    <span><a href="#">비밀번호 찾기</a></span>
+                </div>
+
+        </div>
+        </div>
+    </section>
+    <section> /index.html </section>
+    <script>
+        const loginbtn = document.querySelector('.loginbtn');
+        const userid = document.querySelector('#userid');
+        const userpwd = document.querySelector('#userpwd');
+
+        loginbtn.addEventListener('click', function () {
+            console.log(userid.value, userpwd.value);
+            const user = { userid: userid.value, userpwd: userpwd.value }
+            fetch('http://localhost:3000/auth/login', {
+                method: 'POST',
+                body: JSON.stringify(user),
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+            })
+                .then((response) => response.json())
+                .then((response) => {
+                    //console.log(response);
+                    checkCookie();
+                });
+        })
+
+        document.querySelector('.logout').addEventListener('click', (e) => {
+            e.preventDefault();
+            //document.querySelector('.logout').style.display = 'none';
+            fetch('http://localhost:3000/auth/logout', {
+                method: 'delete',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+            })
+                .then((response) => response.json())
+                .then((response) => {
+                    console.log(response.success);
+                    checkCookie();
+                });
+        })
+        async function checkCookie() {
+            const mycookie = await document.cookie;
+            console.log(mycookie)
+            if (!mycookie.includes('user')) {
+                document.querySelector('.logout').style.display = 'none';
+                document.querySelector('.login').style.display = 'block';
+            } else {
+                document.querySelector('.logout').style.display = 'block';
+                document.querySelector('.login').style.display = 'none';
+            }
+        }
+
+        checkCookie();
+    </script>
+</body>
+
+</html>
